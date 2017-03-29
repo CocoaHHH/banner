@@ -80,9 +80,17 @@ static const NSInteger imageCount = 3;
     //设置图片显示内容
     [self configImages];
     //开启定时
-    [self startTimer];
+    if (!self.isTimerNeedClose) {
+        [self startTimer];
+    }
 }
 
+- (void)setCurrentPageIndicatorTintColor:(UIColor *)currentPageIndicatorTintColor {
+    _currentPageIndicatorTintColor = currentPageIndicatorTintColor;
+    _pageControl.currentPageIndicatorTintColor = currentPageIndicatorTintColor;
+}
+
+#pragma mark - private Method
 - (void)configImages {
     //设置三个imageButton 的显示图片
     for (int i = 0; i < self.scrollView.subviews.count; i ++) {
@@ -117,6 +125,28 @@ static const NSInteger imageCount = 3;
     }
 }
 
+- (void)startTimer {
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(nextImage) userInfo:nil repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    self.timer = timer;
+}
+
+- (void)stopTimer {
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
+- (void)nextImage {
+    CGFloat height = self.bounds.size.height;
+    CGFloat width = self.bounds.size.width;
+    if (self.isScrollDorectionPortrait) {
+        [self.scrollView setContentOffset:CGPointMake(0, 2 * height) animated:YES];
+    } else {
+        [self.scrollView setContentOffset:CGPointMake(2 * width, 0) animated:YES];
+    }
+}
+
+#pragma mark - scrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     //拖动的时候，哪张图片最靠中间，也就是偏移量(相对于scrollView)最小，就滑到哪页
     NSInteger page = 0;
@@ -146,7 +176,9 @@ static const NSInteger imageCount = 3;
 
 //结束拖拽，时开始计时器
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    [self startTimer];
+    if (!self.isTimerNeedClose) {
+        [self startTimer];
+    }
 }
 
 //结束拖拽的时候更新image
@@ -157,29 +189,6 @@ static const NSInteger imageCount = 3;
 //滚动动画结束的时候更新
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     [self updateImages];
-}
-
-- (void)startTimer {
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(nextImage) userInfo:nil repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
-    self.timer = timer;
-}
-
-- (void)stopTimer {
-    [self.timer invalidate];
-    self.timer = nil;
-}
-
-- (void)nextImage {
-
-    CGFloat height = self.bounds.size.height;
-    CGFloat width = self.bounds.size.width;
-    if (self.isScrollDorectionPortrait) {
-        [self.scrollView setContentOffset:CGPointMake(0, 2 * height) animated:YES];
-    } else {
-        [self.scrollView setContentOffset:CGPointMake(2 * width, 0) animated:YES];
-    }
-    
 }
 
 @end
