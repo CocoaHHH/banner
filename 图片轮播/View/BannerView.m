@@ -30,6 +30,10 @@ static const NSInteger imageCount = 3;
         for (int i = 0; i < imageCount; i ++) {
             UIImageView *imageView = [[UIImageView alloc] init];
             [scrollView addSubview:imageView];
+            imageView.contentMode = UIViewContentModeScaleAspectFit;
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewTapAction:)];
+            [imageView addGestureRecognizer:tap];
+            
         }
         UIPageControl *pageControl = [[UIPageControl alloc] init];
         [self addSubview:pageControl];
@@ -69,6 +73,14 @@ static const NSInteger imageCount = 3;
     CGFloat pageX = width - pageWidth;
     CGFloat pageY = height = pageHeight;
     self.pageControl.frame = CGRectMake(pageX, pageY, pageWidth, pageHeight);
+}
+
+- (void)imageViewTapAction:(UITapGestureRecognizer *)tap {
+    __weak __typeof(&*self)weakSelf = self;
+    if (self.bannerBlock) {
+        weakSelf.bannerBlock(weakSelf.pageControl.currentPage);
+    }
+    NSLog(@"bannerView-------%ld",self.pageControl.currentPage);
 }
 
 #pragma mark - Getter and Setter

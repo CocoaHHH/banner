@@ -19,7 +19,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     self.view.backgroundColor = [UIColor whiteColor];
-    BannerView *banner = [[BannerView alloc] initWithFrame:CGRectMake(0, 100, 150, 150)];
+    BannerView *banner = [[BannerView alloc] initWithFrame:CGRectMake(50, 100, 250, 300)];
     banner.isScrollDorectionPortrait = NO;
     NSMutableArray *mutableImages = [[NSMutableArray alloc] initWithCapacity:7];
     for (int i = 0; i < 7; i ++) {
