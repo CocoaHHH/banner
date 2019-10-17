@@ -39,6 +39,8 @@ static const NSInteger imageCount = 3;
         [self addSubview:pageControl];
         pageControl.currentPageIndicatorTintColor = [UIColor redColor];
         self.pageControl = pageControl;
+        [pageControl setValue:[UIImage imageNamed:@"home_gray"] forKeyPath:@"pageImage"];
+        [pageControl setValue:[UIImage imageNamed:@"home_blue"] forKeyPath:@"currentPageImage"];
     }
     return self;
 }
@@ -72,7 +74,8 @@ static const NSInteger imageCount = 3;
     CGFloat pageHeight = 20;
     CGFloat pageX = width - pageWidth;
     CGFloat pageY = height = pageHeight;
-    self.pageControl.frame = CGRectMake(pageX, pageY, pageWidth, pageHeight);
+//    self.pageControl.frame = CGRectMake(pageX, pageY, pageWidth, pageHeight);
+    self.pageControl.frame = CGRectMake(0, self.scrollView.frame.size.height, pageWidth, pageHeight);
 }
 
 - (void)imageViewTapAction:(UITapGestureRecognizer *)tap {
